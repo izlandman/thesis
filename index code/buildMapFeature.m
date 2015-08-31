@@ -4,7 +4,7 @@ function result = buildMapFeature(data,sample_rate,window_overlap,feature)
 [channels,duration] = size(data);
 % break data down into windows with desired overlap
 window_shift = 1 - window_overlap/100;
-num_samples = duration / ( sample_rate * window_shift );
+num_samples = duration / ( sample_rate * window_shift ) + 1;
 sample_screen = zeros(num_samples,duration,channels);
 for i=1:num_samples
     sample_count = (i-1) * window_shift * sample_rate + sample_rate/2;
