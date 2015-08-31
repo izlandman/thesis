@@ -8,6 +8,9 @@
 
 function initializeMap(folder_path,varargin)
 
+% percentage from 0 to 100, but i hope no one ever picks 100.
+window_overlap = varargin{2};
+
 % assume we wish to find .edf files to process
 folder_data = getAllFiles(folder_path);
 folder_list = {};
@@ -23,14 +26,22 @@ end
 % to matching samples
 file_count = length(folder_list);
 major_features = length(varargin{1});
+
 % channel map will fill the first column of the cell with an n by m array
 % indicating the match strength between that sample and all other samples.
 % the second column will indicate which feature is used for this comparison
 channel_map = cell(file_count,major_features);
 for i=1:file_count
     [data,header] = lab_read_edf(folder_list{i});
-    if (nargin > 2)
-        data = data(varargin{2},:);
+    if (nargin > 3)
+        data = data(varargin{3},:);
+    end
+    % pass data to the appropriate feature builders
+    for k=1:major_features
+        % pass data, sampling rate, feature to be computed. return it to
+        % the channel map cell
+        channel_map{i,k} = buildMapFeature(data,header.samplingrate,...
+            window_overlap,varargin{1}(k));
     end
 end
 
