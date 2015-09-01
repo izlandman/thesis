@@ -2,17 +2,19 @@
 % the sample at the given sample rate
 function result = buildMapFeature(data,sample_rate,window_overlap,feature)
 [channels,duration] = size(data);
+window_size = sample_rate;
 % break data down into windows with desired overlap
 window_shift = 1 - window_overlap/100;
-num_samples = duration / ( sample_rate * window_shift );
-sample_screen = zeros(num_samples,duration,channels);
+num_samples = duration / ( window_size * window_shift ) + 1;
+sample_screen = zeros(num_samples,window_size,channels);
+
 for i=1:num_samples
-    sample_count = (i-1) * window_shift * sample_rate + sample_rate/2;
-    leading_edge = sample_count-sample_rate;
-    if( sample_count < sample_rate )
-        sample_window = [ones(1,sample_count)  zeros(1,duration-sample_count)];
-    elseif( sample_count >= sample_rate && leading_edge <= duration-sample_rate )
-        sample_window = [zeros(1,leading_edge) ones(1,sample_rate) zeros(1,duration-sample_rate-leading_edge)];
+    sample_count = (i-1) * window_shift * window_size + window_size/2;
+    leading_edge = sample_count-window_size;
+    if( sample_count < window_size )
+        sample_screen(i,:, = [ones(1,sample_count)*data  zeros(1,duration-sample_count)];
+    elseif( sample_count >= window_size && leading_edge <= duration-window_size )
+        sample_window = [zeros(1,leading_edge) ones(1,window_size) zeros(1,duration-window_size-leading_edge)];
     else
         sample_window = [zeros(1,leading_edge) ones(1,duration-leading_edge)];
     end
