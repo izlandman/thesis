@@ -8,7 +8,7 @@
 
 function initializeMap(folder_path,varargin)
 
-% percentage from 0 to 100, but i hope no one ever picks 100.
+% percentage from 0 to 100, but i hope nobody ever picks 100.
 window_overlap = varargin{2};
 
 % assume we wish to find .edf files to process
