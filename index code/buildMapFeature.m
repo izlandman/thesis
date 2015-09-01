@@ -1,6 +1,10 @@
 % operate on the given data by calling the required feature tool to analyze
 % the sample at the given sample rate
 function result = buildMapFeature(data,sample_rate,window_overlap,feature)
+% result is a cell of length feature. this allows it to hold arrays of
+% length num_samples, but then each feature will produce variable length
+% symbols to be computed
+result = cell(size(feature));
 [channels,duration] = size(data);
 window_size = sample_rate;
 % break data down into windows with desired overlap
@@ -24,4 +28,20 @@ for i=1:num_samples
         sample_screen(i,:,:) = [zeros(1,window_size-(duration-leading_edge+1)) data(:,leading_edge:end)];
     end
 end
+
+% given the feature or features to build, loop through all the feature
+% building tools
+
+for i=1:length(feature)
+    % use a switch because it'll probably scale the easiest, start with
+    % case 1 being FFT into specific bands
+    switch feature(i)
+        case 1
+            result{i} = splitSpectrumLevels(sample_screen,sample_rate);
+        case 2
+        case 3
+        case 4
+    end
+end
+
 end
