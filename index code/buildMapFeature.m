@@ -21,11 +21,11 @@ for i=1:num_samples
     sample_count = (i-1) * window_shift * window_size + window_size/2;
     leading_edge = sample_count-window_size;
     if( sample_count < window_size )
-        sample_screen(i,:,:) = [data(:,1:sample_count)  zeros(1,window_size-sample_count)];
+        sample_screen(i,:,:) = [data(:,1:sample_count)  zeros(channels,window_size-sample_count)]';
     elseif( sample_count >= window_size && leading_edge <= duration-window_size )
-        sample_screen(i,:,:) = data(:,leading_edge+1:leading_edge+sample_rate);
+        sample_screen(i,:,:) = data(:,leading_edge+1:leading_edge+sample_rate)';
     else
-        sample_screen(i,:,:) = [zeros(1,window_size-(duration-leading_edge+1)) data(:,leading_edge:end)];
+        sample_screen(i,:,:) = [zeros(channels,window_size-(duration-leading_edge+1)) data(:,leading_edge:end)]';
     end
 end
 
