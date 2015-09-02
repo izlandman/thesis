@@ -21,4 +21,16 @@ for q=1:channels
     end
 end
 
+% group matching samples together by index
+count = 0;
+grouping = [];
+index = (1:samples);
+while count < samples
+    [y,r] = find( match_index(index(1),:)==1 );
+    % remove index if matched
+    A = ismember(index,r);
+    index(A) = [];
+    count = count + sum(y);
+    grouping{end+1} = r; 
+end
 end
