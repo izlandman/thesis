@@ -26,11 +26,13 @@ end
 % to matching samples
 file_count = length(folder_list);
 major_features = length(varargin{1});
+feature_list = varargin{1};
 
 % channel map will fill the first column of the cell with an n by m array
 % indicating the match strength between that sample and all other samples.
 % the second column will indicate which feature is used for this comparison
 results = cell(file_count,major_features);
+header_tag = zeros(file_count,3);
 for i=1:file_count
     [data,header] = lab_read_edf(folder_list{i});
     if (nargin > 3)
@@ -41,7 +43,9 @@ for i=1:file_count
         % pass data, sampling rate, feature to be computed. return it to
         % the channel map cell
         results{i,k} = buildMapFeature(data,header.samplingrate,...
-            window_overlap,varargin{1}(k));
+            window_overlap,feature_list(k));
+        % build a proper header file
+        header_tag(i,:) = [feature_list(k) header.samplingrate window_overlap];
     end
 end
 
@@ -55,7 +59,8 @@ for i=1:file_count
     [~,name,~] = fileparts(folder_list{i});
     for k=1:length(major_features)
         file_name_save = [now_folder '/' name '_' num2str(k) '_.dat'];
-        dlmwrite([file_name_save],results{i,k});
+        dlmwrite(file_name_save,header_tag(i,:));
+        dlmwrite(file_name_save,results{i,k},'-append');
     end
 end
 

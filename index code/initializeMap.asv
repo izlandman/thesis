@@ -26,6 +26,7 @@ end
 % to matching samples
 file_count = length(folder_list);
 major_features = length(varargin{1});
+feature_list = varargin{1};
 
 % channel map will fill the first column of the cell with an n by m array
 % indicating the match strength between that sample and all other samples.
@@ -41,21 +42,22 @@ for i=1:file_count
         % pass data, sampling rate, feature to be computed. return it to
         % the channel map cell
         results{i,k} = buildMapFeature(data,header.samplingrate,...
-            window_overlap,varargin{1}(k));
+            window_overlap,feature_list(k));
     end
 end
 
 % now that all the features are generated, save them for use with further
 % analysis as Matlab may not be the best place to start building large
 % state diagrams of feature transitions
-now_folder = datestr(now,'yyyy_mm_dd_HH_MM_SS');
+now_folder = ['../' datestr(now,'yyyy_mm_dd_HH_MM_SS')];
 mkdir(now_folder);
 % file names unique to each file in the folder
 for i=1:file_count
     [~,name,~] = fileparts(folder_list{i});
     for k=1:length(major_features)
         file_name_save = [now_folder '/' name '_' num2str(k) '_.dat'];
-        dlmwrite([file_name_save],results{i,k});
+        dlmwrite(file_name_save,header_tag);
+        dlmwrite(file_name_save,results{i,k},'-append');
     end
 end
 
