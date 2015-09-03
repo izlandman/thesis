@@ -16,9 +16,8 @@ end
 % group matching samples together by index
 result = cell(channels,1);
 % column 1 is ID, column 2 is following group, column 3 is next group,
-% columdn 4 is % likelihood of the 2 series occuring, 5 is % likelihood of
-% the 3 series occuring
-tracking_matrix = zeros(num_samples,5,channels);
+% columds 4 through 6 represent the % occurance of that series
+tracking_matrix = zeros(num_samples,6,channels);
 
 for k=1:channels
     count = 0;
@@ -43,7 +42,6 @@ end
 tracking_matrix(1:end-1,2) = tracking_matrix(2:end,1);
 tracking_matrix(1:end-2,3) = tracking_matrix(3:end,1);
 
-transitions = cell(num_groups,channels);
 transition_error_cor = [131 0.5 0.3]';
 for k=1:channels
     for i=1:num_groups
@@ -61,8 +59,9 @@ for k=1:channels
         % there will always be a diagonal zero give it matches to itself,
         % the key is to find the off diagonal matches which tell you how
         % likely that condition is to occur again in the group
-        tracking_matrix(index,4,k) = sum(score1==0)/index_count;
-        tracking_matrix(index,5,k) = sum(score2==0)/index_count;
+        tracking_matrix(index,4,k) = index_count/num_samples;
+        tracking_matrix(index,5,k) = sum(score1==0)/index_count;
+        tracking_matrix(index,6,k) = sum(score2==0)/index_count;
     end
 end
 
