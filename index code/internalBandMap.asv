@@ -82,8 +82,7 @@ for k=1:channels
         tracking_matrix(index,5,k) = sum(score1==0)/index_count;
         tracking_matrix(index,6,k) = sum(score2==0)/index_count;
     end
-    percentages = bsxfun(@rdivide,tracking_matrix(:,8:end,k),sum(tracking_matrix(:,8:end,k),2));
-    tracking_matrix = [ tracking_matrix percentages ];
+    tracking_matrix(:,end:end+length(event_tags),k) = bsxfun(@rdivide,tracking_matrix(:,8:end,k),sum(tracking_matrix(:,8:end,k),2));
 end
 
 
