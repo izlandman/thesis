@@ -41,6 +41,14 @@ for k=1:channels
     end
 end
 
+% With annotation_groups, the same matchFeatureWeight and formGroups can be
+% called to figure out what variations exist in the group clusters relative
+% to the annotations. This should provide one map of features against a map
+% of annotations linked by how the features are weighted. This is probably
+% where writing something in C/C++ is going to help as each cluster for
+% each channel needs to be iterated.
+
+
 transition_error_cor = [131 0.5 0.3]';
 for k=1:channels
     for i=1:num_groups(k)

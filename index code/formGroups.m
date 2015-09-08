@@ -1,7 +1,7 @@
 function [result,tracking_matrix,num_groups] = formGroups(data)
 
 [rowz,~,channels] = size(data);
-tracking_matrix = zeros(rowz,7,channels);
+tracking_matrix = zeros(rowz,1,channels);
 result = cell(channels,1);
 num_groups = zeros(channels,1);
 

@@ -35,11 +35,17 @@ for k=1:channels
         tail_groups{i,k} = [ tracking_matrix(group_index,1,k) ... 
             tracking_matrix(group_index+1,1,k) tracking_matrix(group_index+2,1,k) ...
             tracking_matrix(group_index+3,1,k) ];
-        annotation_groups{i,k} = [ tracking_matrix(group_index,7,k) ... 
-            tracking_matrix(group_index+1,7,k) tracking_matrix(group_index+2,7,k) ...
-            tracking_matrix(group_index+3,7,k)];
+        annotation_groups{i,k} = [ anno_listing(group_index,k) ... 
+            anno_listing(group_index+1,k) anno_listing(group_index+2,k) ...
+            anno_listing(group_index+3,k)];
     end
 end
+
+% With annotation_groups, the same matchFeatureWeight and formGroups can be
+% called to figure out what variations exist in the group clusters relative
+% to the annotations. This should provide one map of features against a map
+% of annotations 
+
 
 transition_error_cor = [131 0.5 0.3]';
 for k=1:channels
