@@ -66,8 +66,8 @@ for k=1:channels
         % for a given group, find the total matches to each potential event
         % marker
         for q=1:length(event_tags)
-            tracking_matrix(index,7+q,k) = sum( tracking_matrix(index,7,k) == event_tags(q) );
-            grouped_data(i,1+q,k) = sum( tracking_matrix(index,7,k) == event_tags(q) );
+            tracking_matrix(index,3+q,k) = sum( anno_listing(index,k) == event_tags(q) );
+            grouped_data(i,1+q,k) = sum( anno_listing(index,k) == event_tags(q) );
         end
         % there will always be a diagonal zero give it matches to itself,
         % the key is to find the off diagonal matches which tell you how
@@ -81,5 +81,20 @@ for k=1:channels
     grouped_data = [ grouped_data percentages ];
 end
 
+% build layer % maps
+states = length(tail_groups{1,1}(1,:));
+state_percent_matrix = zeros(num_groups,num_groups,channels,states);
+for k=1:channels
+    for n=2:states
+        for i=1:num_groups
+            tail_match = tail_groups{i,k}(:,n);
+            for r=1:num_groups
+                state_percent_matrix(i,r,k,n) = sum( tail_match == r ) / num_groups;
+            end
+        end
+    end
+end
+
+result = state_percent_matrix;
 
 end

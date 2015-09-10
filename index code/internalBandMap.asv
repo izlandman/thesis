@@ -44,7 +44,9 @@ end
 % With annotation_groups, the same matchFeatureWeight and formGroups can be
 % called to figure out what variations exist in the group clusters relative
 % to the annotations. This should provide one map of features against a map
-% of annotations 
+% of annotations linked by how the features are weighted. This is probably
+% where writing something in C/C++ is going to help as each cluster for
+% each channel needs to be iterated.
 
 
 transition_error_cor = [131 0.5 0.3]';
@@ -64,8 +66,8 @@ for k=1:channels
         % for a given group, find the total matches to each potential event
         % marker
         for q=1:length(event_tags)
-            tracking_matrix(index,7+q,k) = sum( tracking_matrix(index,7,k) == event_tags(q) );
-            grouped_data(i,1+q,k) = sum( tracking_matrix(index,7,k) == event_tags(q) );
+            tracking_matrix(index,3+q,k) = sum( anno_listing(index,k) == event_tags(q) );
+            grouped_data(i,1+q,k) = sum( anno_listing(index,k) == event_tags(q) );
         end
         % there will always be a diagonal zero give it matches to itself,
         % the key is to find the off diagonal matches which tell you how
@@ -79,5 +81,20 @@ for k=1:channels
     grouped_data = [ grouped_data percentages ];
 end
 
+% build layer % maps
+tail_number = 2;
+states = length
+state_percent_matrix = zeros(num_groups,num_groups,channels,states);
+for k=1:channels
+    for i=1:num_groups
+        percent_match = zeros(num_groups,1);
+        tail_match = tail_groups{i,k}(:,tail_number);
+        for r=1:num_groups
+            percent_match(r) = sum( tail_match == r ) / num_groups;
+        end
+        
+    end
+    
+end
 
 end
