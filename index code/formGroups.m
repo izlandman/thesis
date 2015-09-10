@@ -10,7 +10,7 @@ for k=1:channels
     grouping = [];
     index = (1:rowz);
     while count < rowz
-        [y,r] = find( data(index(1),:)==1 );
+        [y,r] = find( data(index(1),:,k)==1 );
         % remove index if matched
         A = ismember(index,r);
         index(A) = [];
