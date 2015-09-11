@@ -13,6 +13,8 @@ switch feature
         result = internalBandMap(data,name,sample_rate,window_overlap);
         file_handle = 'band';
     case 2
+        result = internalWarpMap(data,name,sample_rate,window_overlap);
+        file_handle = 'warp';
     case 3
 end
 

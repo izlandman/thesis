@@ -52,7 +52,15 @@ end
 % now that all the features are generated, save them for use with further
 % analysis as Matlab may not be the best place to start building large
 % state diagrams of feature transitions
-now_folder = ['../' datestr(now,'yyyy_mm_dd_HH_MM_SS')];
+
+switch feature_list
+    case 1
+        feat_type = 'band';
+    case 2
+        feat_type = 'warp';
+end
+
+now_folder = ['../' datestr(now,'yyyy_mm_dd_HH_MM_SS') '/' feat_type];
 mkdir(now_folder);
 % file names unique to each file in the folder
 for i=1:file_count

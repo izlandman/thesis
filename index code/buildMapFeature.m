@@ -39,6 +39,7 @@ for i=1:length(feature)
         case 1
             result{i} = splitSpectrumLevels(sample_screen,sample_rate);
         case 2
+            result{i} = splitTimeWarp(sample_screen,sample_rate);
         case 3
         case 4
     end
