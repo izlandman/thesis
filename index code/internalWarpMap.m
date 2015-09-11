@@ -4,9 +4,10 @@ function result = internalWarpMap(data,file_name,sample_rate,window_overlap)
 [num_samples,window_length] = size(data);
 
 result = zeros(num_samples,num_samples);
+norm_data = normr(data);
 for r=1:num_samples
-    for k=1:num_samples
-        result(r,k) = dtw(data(r,:),data(k,:),10);
+    for k=r:num_samples
+        result(r,k) = dtw(norm_data(r,:)',norm_data(k,:)',window_length);
     end
 end
 
@@ -29,6 +30,15 @@ result_flag = reshape(result_flag,num_samples,num_samples);
 % within the annotations. add this value to the trackin_matrix
 anno_name = ['C:/_ward/_thesis/_Data/physio/eegmmidb/Annotations/' file_name(1:7) '_ANN.ann'];
 [event_tags, anno_listing] = annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
+
+close all;
+
+figure(20);plot(result_flag(:,20).*anno_listing)
+figure(100);plot(result_flag(:,100).*anno_listing)
+figure(200);plot(result_flag(:,200).*anno_listing)
+figure(300);plot(result_flag(:,300).*anno_listing)
+figure(400);plot(result_flag(:,400).*anno_listing)
+figure(500);plot(result_flag(:,500).*anno_listing)
 
 
 end
