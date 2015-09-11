@@ -66,7 +66,7 @@ mkdir(now_folder);
 for i=1:file_count
     [~,name,~] = fileparts(folder_list{i});
     for k=1:length(major_features)
-        file_name_save = [now_folder '/' name '_' num2str(k) '_.mat'];
+        file_name_save = [now_folder '/' name '_' num2str(varargin{3}(k)) '_.mat'];
         final_output = [ header_tag(i,:) ; results{i,k}];
         save(file_name_save,'final_output');
 %         dlmwrite(file_name_save,header_tag(i,:));

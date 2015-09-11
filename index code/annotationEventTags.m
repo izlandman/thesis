@@ -16,4 +16,9 @@ event_tag_low = min(anno_data(:,3));
 event_tag_high = max(anno_data(:,3));
 events = [event_tag_low:event_tag_high];
 
+% scale annotations to prime numbers
+anno_listing(anno_listing==0) = 3;
+anno_listing(anno_listing==1) = 5;
+anno_listing(anno_listing==2) = 7;
+
 end
