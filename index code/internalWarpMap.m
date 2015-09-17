@@ -40,6 +40,6 @@ figure(300);plot(result_flag(:,300).*anno_listing)
 figure(400);plot(result_flag(:,400).*anno_listing)
 figure(500);plot(result_flag(:,500).*anno_listing)
 
-save('result_flag.mat',result_flag);
+save('result_flag.mat','result_flag');
 
 end
