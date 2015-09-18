@@ -11,8 +11,10 @@ for r=1:num_samples
     end
 end
 
+result_full = result + result';
+
 % remove diagonal from matrix
-result_temp = result;
+result_temp = result_full;
 result_temp( logical( eye(size(result_temp)) ) ) = [];
 result_temp = reshape(result_temp,num_samples-1,num_samples);
 temp_mean = mean(result_temp);
@@ -21,10 +23,8 @@ temp_std = std(result_temp);
 % -1 flags for below one stddev, +1 flags for above one stddev, 1/2 for
 % within one stddev
 result_flag = ones(num_samples,num_samples);
-result_flag( result < repmat(temp_mean-temp_std,num_samples,1) ) = -1;
-result_flag = reshape(result_flag,num_samples,num_samples);
-result_flag( result > repmat(temp_mean+temp_std,num_samples,1) ) = 1/3;
-result_flag = reshape(result_flag,num_samples,num_samples);
+result_flag( result_full < repmat(temp_mean-temp_std,num_samples,1) ) = -1;
+result_flag( result_full > repmat(temp_mean+temp_std,num_samples,1) ) = 1/3;
 
 % take the annotation file and determine where each leading sample falls
 % within the annotations. add this value to the trackin_matrix
@@ -40,6 +40,6 @@ figure(300);plot(result_flag(:,300).*anno_listing)
 figure(400);plot(result_flag(:,400).*anno_listing)
 figure(500);plot(result_flag(:,500).*anno_listing)
 
-save('result_flag.mat','result_flag');
+save('result.mat','result');
 
 end
