@@ -40,6 +40,6 @@ anno_name = ['C:/_ward/_thesis/_Data/physio/eegmmidb/Annotations/' file_name(1:7
 % figure(400);plot(result_flag(:,400).*anno_listing)
 % figure(500);plot(result_flag(:,500).*anno_listing)
 
-save('result.mat','result');
+save('result.mat','result_full');
 
 end
