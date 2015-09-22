@@ -26,7 +26,9 @@ end
 end
 
 % write result back out for later
-new_dir = [path '/' file_handle '/' datestr(now,'yyyy_mm_dd_HH_MM_SS')];
+new_dir = [path '/' file_handle '_results/' datestr(now,'yyyy_mm_dd_HH_MM_SS')];
+% if parent folders do not exist, Matlab will make them. otherwise it uses
+% already produced folders
 mkdir(new_dir);
 output_file = [new_dir '/' name '.mat'];
 save(output_file,'result');

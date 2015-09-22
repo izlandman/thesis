@@ -12,9 +12,7 @@ for i=1:length(anno_data_samples(:,1))
     anno_listing(anno_index{i}) = anno_data(i,3);
 end
 
-event_tag_low = min(anno_data(:,3));
-event_tag_high = max(anno_data(:,3));
-events = [event_tag_low:event_tag_high];
+events = [3 5 7];
 
 % scale annotations to prime numbers
 anno_listing(anno_listing==0) = 3;
