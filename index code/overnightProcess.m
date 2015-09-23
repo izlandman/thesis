@@ -2,7 +2,7 @@ function overnightProcess(directory)
 
 file_listing = dir(directory);
 
-for i=1:length(file_listing)
+for i=3:length(file_listing)
     % operate only on files in the folder, not directories
     [path,name,ext] = fileparts(file_listing(i).name);
     if( file_listing(i).isdir == 0 && strcmp(ext,'.mat'))
