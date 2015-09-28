@@ -1,5 +1,5 @@
 function [result_flag,anno_listing] = scoreWarp(data,file_name,sample_rate,window_overlap)
-close all;
+
 [num_samples,~] = size(data);
 % if the matrix isn't full, complete the columns
 x_row = round(num_samples/2);
@@ -25,10 +25,10 @@ result_flag( result_full > repmat(temp_mean+2*temp_std,num_samples,1) ) = 1/3;
 % take the annotation file and determine where each leading sample falls
 % within the annotations. add this value to the trackin_matrix
 anno_name = ['./_thesis/_Data/physio/eegmmidb/Annotations/' file_name(1:7) '_ANN.ann'];
-[event_tags, anno_listing] = annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
+[event_tags, anno_listing, anno_index] = annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
 %annotation plot
 figure('numbertitle','off','name','Annotation Record Plot');
-plot(anno_listing);
+plot(anno_listing);title(file_name);xlabel('Window Index');ylabel('Event Marker');
 
 % generate confusion plot based upon events
 num_tags = length(event_tags);
@@ -46,24 +46,33 @@ for r=1:num_tags
     new_index = [new_index tag_index{r}'];
     hist_plot = hist_data(tag_index{r},tag_index{r});
     subplot(3,1,r);hist(hist_plot(hist_plot>0),50);
-    xlabel('distance');ylabel('window count');xlim([plot_min plot_max]);
+    title(file_name);ylabel('window count');xlim([plot_min plot_max]);
     title_lab = ['internal distance of event ' num2str(r) ];
-    title(title_lab);
+    xlabel(title_lab);
 end
 
 figure('numbertitle','off','name','External Histogram');
 hist_plot = hist_data(tag_index{1},tag_index{2});
 subplot(3,1,1);hist(hist_plot(hist_plot>0),50);
+title(file_name);
 hist_plot = hist_data(tag_index{1},tag_index{3});
 subplot(3,1,2);hist(hist_plot(hist_plot>0),50);
+title(file_name);
 hist_plot = hist_data(tag_index{2},tag_index{3});
 subplot(3,1,3);hist(hist_plot(hist_plot>0),50);
+title(file_name);
 
 confusion_data = result_full(new_index,new_index);
 % remove the zeros, which should only be for cases of identity
+conf_data_saved = confusion_data;
+confusion_data_2 = normc(conf_data_saved);
 confusion_data(confusion_data==0) = NaN;
+confusion_data_2(confusion_data_2==0) = NaN;
 figure('numbertitle','off','name','DTW Confusion Matrix');
-mesh(confusion_data);
+% normalize distance?
+% anorm = (confusion_data - min(min(confusion_data)))/(max(max(confusion_data))-min(min(confusion_data)));
+mesh(confusion_data);colormap('jet');
+title(file_name);
 xlim([0 num_samples]);ylim([0 num_samples]);
 ylabel('window index');xlabel('window index');colorbar;
 view(0,90);
@@ -75,6 +84,14 @@ line([T0_thresh T0_thresh],[1 num_samples],[100 100],'linewidth',2,'color','k');
 T1_thresh = T0_thresh + event_lengths(2);
 line([1 num_samples],[T1_thresh T1_thresh],[100 100],'linewidth',2,'color','k');
 line([T1_thresh T1_thresh],[1 num_samples],[100 100],'linewidth',2,'color','k');
+
+% event threshold lines
+x_coord = 0;
+for i=1:length(anno_index)-1
+    x_coord = x_coord + anno_index(i) - 1;
+    line([x_coord x_coord],[1 num_samples],[100 100],'linewidth',1,'color','k');
+end
+
 % event thresholds, every 4.1 seconds
 % samples_per_event = 4.1 * (100/(100-window_overlap));
 % for i=1:round(num_samples/samples_per_event)

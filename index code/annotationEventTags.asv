@@ -14,7 +14,7 @@ for i=1:length(anno_data_samples(:,1))
     event_length(i) = length(anno_index{i});
 end
 
-event_double = [event_length(anno_data(:,3)==0) event_length(anno_data(:,3)==1) event_length(anno_data(:,3)==2)];
+event_double = [event_length(anno_listing==0) event_length(event_length==1) event_length(event_length==2)];
 event_length = event_double;
 events = [3 5 7];
 
