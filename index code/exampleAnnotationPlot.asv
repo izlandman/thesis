@@ -1,0 +1,22 @@
+function exampleAnnotationPlot(file_name,location)
+
+num_samples = 501;
+sample
+
+% take the annotation file and determine where each leading sample falls
+% within the annotations. add this value to the trackin_matrix
+
+if( location == 1 )
+    % at temple
+    anno_name = ['C:/_ward/_thesis/_Data/physio/eegmmidb/Annotations/' file_name(1:7) '_ANN.ann'];
+else
+    % not at temple, at home?
+    anno_name = ['F:/_research/_thesis/_Data/physio/eegmidb/Annotations/' file_name(1:7) '_ANN.ann'];
+end
+
+[event_tags, anno_listing] = annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
+%annotation plot
+figure('numbertitle','off','name','Annotation Record Plot');
+plot(anno_listing);
+
+end
