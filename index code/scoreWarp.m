@@ -51,6 +51,14 @@ for r=1:num_tags
     title(title_lab);
 end
 
+figure('numbertitle','off','name','External Histogram');
+hist_plot = hist_data(tag_index{1},tag_index{2});
+subplot(3,1,1);hist(hist_plot(hist_plot>0),50);
+hist_plot = hist_data(tag_index{1},tag_index{3});
+subplot(3,1,2);hist(hist_plot(hist_plot>0),50);
+hist_plot = hist_data(tag_index{2},tag_index{3});
+subplot(3,1,3);hist(hist_plot(hist_plot>0),50);
+
 confusion_data = result_full(new_index,new_index);
 % remove the zeros, which should only be for cases of identity
 confusion_data(confusion_data==0) = NaN;
@@ -73,5 +81,72 @@ line([T1_thresh T1_thresh],[1 num_samples],[100 100],'linewidth',2,'color','k');
 %     sample_end = round( i * samples_per_event);
 %     line([sample_end sample_end],[1 num_samples],[100 100],'linewidth',1,'color','k');
 % end
+
+% colormap_mine =
+% 
+%          0    1.0000         0
+%          0    1.0000         0
+%          0    1.0000         0
+%          0    1.0000         0
+%          0    1.0000         0
+%          0    1.0000         0
+%          0    1.0000         0
+%          0    1.0000         0
+%     0.8549    0.7020    1.0000
+%     0.8549    0.7020    1.0000
+%     0.8549    0.7020    1.0000
+%     0.8549    0.7020    1.0000
+%     0.8549    0.7020    1.0000
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%          0         0         0
+%     1.0000    1.0000         0
+%     1.0000    1.0000         0
+%     1.0000    1.0000         0
+%     1.0000    1.0000         0
+%     1.0000    1.0000         0
+%     1.0000    1.0000         0
+%     1.0000    1.0000         0
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
+%     1.0000         0    1.0000
 
 end
