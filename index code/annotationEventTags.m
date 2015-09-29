@@ -11,7 +11,7 @@ anno_index = arrayfun(@colon, anno_data_samples(:,1), anno_data_samples(:,2),'Un
 event_length = zeros(1,length(anno_data_samples(:,1)));
 for i=1:length(anno_data_samples(:,1))
     anno_listing(anno_index{i}) = anno_data(i,3);
-    event_length(i) = length(anno_index{i});
+    event_length(i) = anno_data_samples(i,2) - anno_data_samples(i,1);
 end
 
 event_double = [event_length(anno_data(:,3)==0) event_length(anno_data(:,3)==1) event_length(anno_data(:,3)==2)];
