@@ -45,34 +45,42 @@ for r=1:num_tags
     event_lengths(r) = length(tag_index{r});
     new_index = [new_index tag_index{r}'];
     hist_plot = hist_data(tag_index{r},tag_index{r});
-    subplot(3,1,r);hist(hist_plot(hist_plot>0),50);
+    subplot(3,1,r);hist(hist_plot(hist_plot>0),100);
     title(file_name);ylabel('window count');xlim([plot_min plot_max]);
     title_lab = ['internal distance of event ' num2str(r) ];
     xlabel(title_lab);
 end
 
 figure('numbertitle','off','name','External Histogram');
-hist_plot = hist_data(tag_index{1},tag_index{2});
-subplot(3,1,1);hist(hist_plot(hist_plot>0),50);
+hist_plot_1 = hist_data(tag_index{1},tag_index{2});
+hist_plot_2 = hist_data(tag_index{1},tag_index{3});
+hist_plot_3 = hist_data(tag_index{2},tag_index{3});
+
+extern_max = max( [max(hist_plot_1) max(hist_plot_2) max(hist_plot_3)] );
+
+subplot(3,1,1);hist(hist_plot_1(hist_plot_1>0),100);
 title(file_name);
-hist_plot = hist_data(tag_index{1},tag_index{3});
-subplot(3,1,2);hist(hist_plot(hist_plot>0),50);
+xlim([0 extern_max]);
+subplot(3,1,2);hist(hist_plot_2(hist_plot_2>0),100);
 title(file_name);
-hist_plot = hist_data(tag_index{2},tag_index{3});
-subplot(3,1,3);hist(hist_plot(hist_plot>0),50);
+xlim([0 extern_max]);
+subplot(3,1,3);hist(hist_plot_3(hist_plot_3>0),100);
 title(file_name);
+xlim([0 extern_max]);
 
 confusion_data = result_full(new_index,new_index);
 % remove the zeros, which should only be for cases of identity
 conf_data_saved = confusion_data;
 confusion_data_2 = normc(conf_data_saved);
 confusion_data(confusion_data==0) = NaN;
+max_conf = max(max(confusion_data));
+% confusion_data(confusion_data<max_conf*.70) = NaN;
 confusion_data_2(confusion_data_2==0) = NaN;
 figure('numbertitle','off','name','DTW Confusion Matrix');
 % normalize distance?
 % anorm = (confusion_data - min(min(confusion_data)))/(max(max(confusion_data))-min(min(confusion_data)));
-
-mesh(confusion_data);
+plot_this = (confusion_data);
+mesh(plot_this);
 % get my color map
 R = load('myColorMap1');
 colormap(R.myColorMapBluePink);
@@ -81,7 +89,7 @@ xlim([1 num_samples]);ylim([1 num_samples]);
 ylabel('Window Index','fontsize',12);xlabel('Window Index','fontsize',12);colorbar;
 view(0,90);
 
-peak_val = max(max(confusion_data));
+peak_val = max(max(plot_this));
 
 % T0 threshold
 T0_thresh = event_lengths(1) + 1;
