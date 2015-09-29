@@ -106,9 +106,8 @@ for i=1:length(g_coord)
     line([x_coord(i) x_coord(i)],[1 num_samples],[peak_val peak_val],'linewidth',1,'color','k');
 end
 
-set(gca,'xTick',linspace(1,num_samples-anno_index(end),length(anno_index)),...
-    'XTickLabel',sprintf('%d|',new_index(g_coord(1:end-1))));
-set(gca,'yTick',linspace(1,num_samples-anno_index(end),length(anno_index)),...
-    'YTickLabel',sprintf('%d|',new_index(g_coord(1:end-1))));
+axisLabels = num2cell( new_index(g_coord(1:end-1)) );
+set(gca,'xTick',linspace(1,num_samples-anno_index(end),length(anno_index)),'XTickLabel',axisLabels);
+set(gca,'yTick',linspace(1,num_samples-anno_index(end),length(anno_index)),'YTickLabel',axisLabels);
  
 end
