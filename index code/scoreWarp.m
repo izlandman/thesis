@@ -40,15 +40,21 @@ event_lengths = zeros(1,length(tag_index));
 figure('numbertitle','off','name','Internal Histogram');
 plot_min = min(min(hist_data));
 plot_max = max(max(hist_data));
+
 for r=1:num_tags
     tag_index{r} = find(anno_listing == event_tags(r));
     event_lengths(r) = length(tag_index{r});
     new_index = [new_index tag_index{r}'];
     hist_plot = hist_data(tag_index{r},tag_index{r});
-    subplot(3,1,r);hist(hist_plot(hist_plot>0),100);
-    title(file_name);ylabel('window count');xlim([plot_min plot_max]);
-    title_lab = ['internal distance of event ' num2str(r) ];
-    xlabel(title_lab);
+    subplot(3,1,r);hist(hist_plot(hist_plot>0),200);
+    ylabel('Window Count','fontsize',14);xlim([plot_min plot_max]);
+    title_lab = ['Internal Distance, Event: ' num2str(r) ];
+    xlabel(title_lab,'fontsize',14);
+    set(gca,'fontsize',14);
+    if( r == 1 )
+        title_lab = ['Internal Distance Histogram, ' file_name];
+        title(title_lab,'fontsize',14);
+    end
 end
 
 figure('numbertitle','off','name','External Histogram');
@@ -58,15 +64,20 @@ hist_plot_3 = hist_data(tag_index{2},tag_index{3});
 
 extern_max = max( [max(hist_plot_1) max(hist_plot_2) max(hist_plot_3)] );
 
-subplot(3,1,1);hist(hist_plot_1(hist_plot_1>0),100);
-title(file_name);
-xlim([0 extern_max]);
-subplot(3,1,2);hist(hist_plot_2(hist_plot_2>0),100);
-title(file_name);
-xlim([0 extern_max]);
-subplot(3,1,3);hist(hist_plot_3(hist_plot_3>0),100);
-title(file_name);
-xlim([0 extern_max]);
+subplot(3,1,1);hist(hist_plot_1(hist_plot_1>0),200);
+title_t = [ 'External Distance Histogram, ' file_name ];
+title(title_t, 'fontsize',14);
+xlim([0 extern_max]);ylabel('Window Count','fontsize',14)
+xlabel('External Distance, Event: 0 to 1','fontsize',14);
+set(gca,'fontsize',14);
+subplot(3,1,2);hist(hist_plot_2(hist_plot_2>0),200);
+xlim([0 extern_max]);ylabel('Window Count','fontsize',14)
+xlabel('External Distance, Event: 0 to 2','fontsize',14);
+set(gca,'fontsize',14);
+subplot(3,1,3);hist(hist_plot_3(hist_plot_3>0),200);
+xlim([0 extern_max]);ylabel('Window Count','fontsize',14)
+xlabel('External Distance, Event: 1 to 2','fontsize',14);
+set(gca,'fontsize',14);
 
 confusion_data = result_full(new_index,new_index);
 % remove the zeros, which should only be for cases of identity
@@ -84,9 +95,9 @@ mesh(plot_this);
 % get my color map
 R = load('myColorMap1');
 colormap(R.myColorMapBluePink);
-title(['Subject: ' file_name ' Confusion Matrix'],'fontweight','bold','fontsize',14);
+title(['Subject: ' file_name ' Confusion Matrix'],'fontweight','bold','fontsize',16);
 xlim([1 num_samples]);ylim([1 num_samples]);
-ylabel('Window Index','fontsize',12);xlabel('Window Index','fontsize',12);colorbar;
+ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
 view(0,90);
 
 peak_val = max(max(plot_this));
@@ -117,5 +128,5 @@ end
 axisLabels = num2cell( new_index(g_coord(1:end-1)) );
 set(gca,'xTick',linspace(1,num_samples-anno_index(end),length(anno_index)),'XTickLabel',axisLabels);
 set(gca,'yTick',linspace(1,num_samples-anno_index(end),length(anno_index)),'YTickLabel',axisLabels);
- 
+set(gca,'FontSize',14);
 end
