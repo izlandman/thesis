@@ -1,5 +1,5 @@
 function windowOrderedConfusion(data,file_name,sample_rate,window_overlap)
-
+close all;
 [num_samples,~] = size(data);
 % if the matrix isn't full, complete the columns
 x_row = round(num_samples/2);
@@ -43,17 +43,17 @@ for i=1:length(anno_index)
 end
 x_coord = g_coord + 1;
 x_coord(1) = 0;
-bloated_data = [];
-for r=1:ceil(anno_index)
+ordered_windows = [];
+
+for r=1:min(anno_index)
     index_1 = x_coord(1:end-1)+r;
-    invalid_index = ( index_1 - x_coord(1:end-1) ) > anno_index; 
-    new_values = result_full(new_index(index_1),:);
-    new_values(new_index(index_1(invalid_index))) = NaN;
-    bloated_data = [bloated_data; new_values];
+    ordered_windows = [ordered_windows new_index(index_1)];
 end
-shorter_set = length(bloated_data(:,1));
-figure('numbertitle','off','name','Window Ordered Tasks');
-mesh(bloated_data);view(0,90);
+result_full(result_full == 0)= NaN;
+short_side = length(ordered_windows);
+figure('numbertitle','off','name','Window Ordered Tasks, Skimmed');
+mesh(result_full(ordered_windows,ordered_windows));view(0,90);
+axis([0 short_side 0 short_side]);axis square;
 % get my color map
 R = load('myColorMap1');
 colormap(R.myColorMapBluePink);
