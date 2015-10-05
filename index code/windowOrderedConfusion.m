@@ -38,16 +38,15 @@ end
 tasks = length(anno_index);
 % event threshold lines
 g_coord = zeros(1,tasks);
-g_coord(1) = 0;
+g_coord(1) = 1;
 for i=1:length(anno_index)
     g_coord(i+1) = g_coord(i) + anno_index(i);
 end
-x_coord = g_coord + 1;
-x_coord(1) = 0;
+x_coord = g_coord;
 ordered_windows = [];
 
 for r=1:min(anno_index)
-    index_1 = x_coord(1:end-1)+r;
+    index_1 = x_coord(1:end-1)+r-1;
     ordered_windows = [ordered_windows new_index(index_1)];
 end
 result_full(result_full == 0)= NaN;
