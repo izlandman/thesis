@@ -25,7 +25,8 @@ result_flag( result_full > repmat(temp_mean+2*temp_std,num_samples,1) ) = 1/3;
 % take the annotation file and determine where each leading sample falls
 % within the annotations. add this value to the trackin_matrix
 anno_name = ['./_thesis/_Data/physio/eegmmidb/Annotations/' file_name(1:7) '_ANN.ann'];
-[event_tags, anno_listing, anno_index] = annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
+[events, anno_listing, anno_index] = annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
+event_tags = unique(events);
 %annotation plot
 figure('numbertitle','off','name','Annotation Record Plot');
 plot(anno_listing);title(file_name);xlabel('Window Index');ylabel('Event Marker');

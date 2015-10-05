@@ -19,8 +19,9 @@ temp_std = std(data);
 % take the annotation file and determine where each leading sample falls
 % within the annotations. add this value to the trackin_matrix
 anno_name = ['./_thesis/_Data/physio/eegmmidb/Annotations/' file_name(1:7) '_ANN.ann'];
-[event_tags, anno_listing, anno_index] = annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
-
+[events, anno_listing, anno_index] = ...
+    annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
+event_tags = unique(events);
 % generate confusion plot based upon events
 num_tags = length(event_tags);
 tag_index = cell(num_tags,1);
@@ -60,5 +61,21 @@ colormap(R.myColorMapBluePink);
 title(['Subject: ' file_name ' Window Ordered Confusion Matrix'],'fontweight','bold','fontsize',16);
 ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
 view(0,90);
+
+test_final = zeros(tasks,max(anno_index));
+x_coord(1) = 1;
+for t=1:max(anno_index)
+    index_test = x_coord(1:end-1)+t-1;
+    if( t > 1 )
+        % don't write longer than the true window size
+        valid_check = (index_test'>test_final(:,t-1));
+        % ensure you don't index too far
+        excess_check = (index_test > num_samples);
+        % combine verification, if anything is modified don't store it
+        full_check = valid_check' + excess_check;
+        index_test(excess_check) = 1;
+    end
+    test_final(:,t) = new_index(index_test);
+end
 
 end
