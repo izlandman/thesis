@@ -13,8 +13,6 @@ result_full = data;
 % remove diagonal from matrix
 data( logical( eye(size(data)) ) ) = [];
 data = reshape(data,num_samples-1,num_samples);
-temp_mean = mean(data);
-temp_std = std(data);
 
 % take the annotation file and determine where each leading sample falls
 % within the annotations. add this value to the trackin_matrix
@@ -38,16 +36,15 @@ end
 tasks = length(anno_index);
 % event threshold lines
 g_coord = zeros(1,tasks);
-g_coord(1) = 0;
+g_coord(1) = 1;
 for i=1:length(anno_index)
     g_coord(i+1) = g_coord(i) + anno_index(i);
 end
-x_coord = g_coord + 1;
-x_coord(1) = 0;
+x_coord = g_coord;
 ordered_windows = [];
 
 for r=1:min(anno_index)
-    index_1 = x_coord(1:end-1)+r;
+    index_1 = x_coord(1:end-1)+r-1;
     ordered_windows = [ordered_windows new_index(index_1)];
 end
 result_full(result_full == 0)= NaN;
@@ -63,18 +60,24 @@ ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorb
 view(0,90);
 
 test_final = zeros(tasks,max(anno_index));
+x_coord(1) = 1;
+old_index = [];
 for t=1:max(anno_index)
-    index_test = x_coord(1:end-1)+t;
+    index_test = x_coord(1:end-1)+t-1;
     if( t > 1 )
         % don't write longer than the true window size
-        valid_check = (index_test'<test_final(:,t-1));
+        valid_check = (index_test' == 1 + test_final(:,t-1));
         % ensure you don't index too far
-        excess_check = (index_test > num_samples);
+        excess_check = (index_test < num_samples);
         % combine verification, if anything is modified don't store it
-        full_check = valid_check' + excess_check;
-        index_test(excess_check) = 1;
+        full_check = valid_check' & excess_check;
+        index_test(~full_check) = 1;
     end
     test_final(:,t) = new_index(index_test);
+    old_index = index_test';
+    if( t > 1 )
+        test_final(~full_check,t) = NaN;
+    end
 end
 
 end

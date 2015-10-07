@@ -13,8 +13,6 @@ result_full = data;
 % remove diagonal from matrix
 data( logical( eye(size(data)) ) ) = [];
 data = reshape(data,num_samples-1,num_samples);
-temp_mean = mean(data);
-temp_std = std(data);
 
 % take the annotation file and determine where each leading sample falls
 % within the annotations. add this value to the trackin_matrix
@@ -61,20 +59,23 @@ title(['Subject: ' file_name ' Window Ordered Confusion Matrix'],'fontweight','b
 ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
 view(0,90);
 
+% this builds complete index of event windows!
 test_final = zeros(tasks,max(anno_index));
 x_coord(1) = 1;
 for t=1:max(anno_index)
     index_test = x_coord(1:end-1)+t-1;
-    if( t > 1 )
-        % don't write longer than the true window size
-        valid_check = (index_test'>test_final(:,t-1));
-        % ensure you don't index too far
-        excess_check = (index_test > num_samples);
-        % combine verification, if anything is modified don't store it
-        full_check = valid_check' + excess_check;
-        index_test(excess_check) = 1;
-    end
+    
+    % don't write longer than the true window size
+    valid_check = (anno_index >= t);
+    % ensure you don't index too far
+    excess_check = (index_test < num_samples);
+    % combine verification, if anything is modified don't store it
+    full_check = valid_check & excess_check;
+    index_test(~full_check) = 1;
+    
     test_final(:,t) = new_index(index_test);
+    test_final(~full_check,t) = NaN;
+    
 end
 
 end

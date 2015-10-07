@@ -4,21 +4,25 @@ anno_listing = zeros(samples,1);
 % window overlap starts at 50%, so first two samples are part of first
 % event. any excess samples after that are part of final event
 anno_data = dlmread(file_name);
+true_final = round(anno_data(2,end))/(sample_rate * (1-window_overlap/100) );
+additional_end_windows = samples - true_final - 2;
+if( additional_end_windows < 0 )
+    % it really shouldn't be negative
+    disp('additional_end_windows is trying to return a negative value in annotationEventTags.');
+    additional_end_windows = 0;
+end
 
 events = anno_data(:,3);
+anno_data(1,1) = -2;
 anno_data_samples = round( anno_data(:,1:2)/(sample_rate*(100-window_overlap)/100) );
-anno_data_samples(1,1) = -2;
-anno_data_samples = anno_data_samples + 2;
-anno_data_samples(:,1) = anno_data_samples(:,1) + 1;
 anno_data_samples(end,2) = samples;
-
 anno_index = arrayfun(@colon, anno_data_samples(:,1), anno_data_samples(:,2),'UniformOutput',0);
 
 % make annotation index equal in length to processed file
 event_length = zeros(1,length(anno_data_samples(:,1)));
 for i=1:length(anno_data_samples(:,1))
     anno_listing(anno_index{i}) = anno_data(i,3);
-    event_length(i) = anno_data_samples(i,2) - anno_data_samples(i,1) + 1;
+    event_length(i) = anno_data_samples(i,2) - anno_data_samples(i,1);
 end
 
 event_double = [event_length(events==0) event_length(events==1) event_length(events==2)];
