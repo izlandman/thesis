@@ -10,9 +10,6 @@ if( data(x_row,x_col) ~= data(x_col,x_row))
 end
 
 result_full = data;
-% remove diagonal from matrix
-data( logical( eye(size(data)) ) ) = [];
-data = reshape(data,num_samples-1,num_samples);
 
 % take the annotation file and determine where each leading sample falls
 % within the annotations. add this value to the trackin_matrix
@@ -47,17 +44,6 @@ for r=1:min(anno_index)
     index_1 = x_coord(1:end-1)+r-1;
     ordered_windows = [ordered_windows new_index(index_1)];
 end
-result_full(result_full == 0)= NaN;
-short_side = length(ordered_windows);
-figure('numbertitle','off','name','Window Ordered Tasks, Skimmed');
-mesh(result_full(ordered_windows,ordered_windows));view(0,90);
-axis([0 short_side 0 short_side]);axis square;
-% get my color map
-R = load('myColorMap1');
-colormap(R.myColorMapBluePink);
-title(['Subject: ' file_name ' Window Ordered Confusion Matrix'],'fontweight','bold','fontsize',16);
-ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
-view(0,90);
 
 % this builds complete index of event windows!
 test_final = zeros(tasks,max(anno_index));
@@ -68,7 +54,7 @@ for t=1:max(anno_index)
     % don't write longer than the true window size
     valid_check = (anno_index >= t);
     % ensure you don't index too far
-    excess_check = (index_test < num_samples);
+    excess_check = (index_test <= num_samples);
     % combine verification, if anything is modified don't store it
     full_check = valid_check & excess_check;
     index_test(~full_check) = 1;
@@ -77,5 +63,41 @@ for t=1:max(anno_index)
     test_final(~full_check,t) = NaN;
     
 end
+
+result_full(result_full == 0)= NaN;
+
+full_index = reshape(test_final,1,[]);
+full_index(isnan(full_index)) = [];
+% figure(42);mesh(result_full(full_index,full_index));view(0,90);
+% colormap(R.myColorMapBluePink);
+% axis([ 1 num_samples 1 num_samples ]);
+
+% plots of each event grouping
+R = load('myColorMap1');
+ev_ind = 1;
+for q=1:num_tags
+    event_count = sum(events==event_tags(q));
+    ev_end = event_count - 1 + ev_ind;
+    ev_index = reshape(test_final(ev_ind:ev_end,:),1,[]);
+    ev_index(isnan(ev_index)) = [];
+    axis_len = length(ev_index);
+    figure(q*19);mesh(result_full(ev_index,ev_index));view(0,90);
+    title(['Subject: ' file_name ' Window Ordered Confusion Matrix, Event-' num2str(q-1)],'fontweight','bold','fontsize',16);
+    ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
+    colormap(R.myColorMapBluePink);
+    axis([ 1 axis_len 1 axis_len]);
+    ev_ind = ev_end + 1;
+    diagonalDistancePlot(result_full(ev_index,ev_index),event_count,1,1);
+end
+
+figure('numbertitle','off','name','Window Ordered Tasks, Skimmed');
+mesh(result_full(full_index,full_index));view(0,90);
+axis([0 num_samples 0 num_samples]);axis square;
+% get my color map
+R = load('myColorMap1');
+colormap(R.myColorMapBluePink);
+title(['Subject: ' file_name ' Window Ordered Confusion Matrix'],'fontweight','bold','fontsize',16);
+ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
+view(0,90);
 
 end
