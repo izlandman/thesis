@@ -5,12 +5,16 @@ spacing = lag*events;
 leading = start_point:1:length1-spacing;
 trailing = spacing+start_point:1:length1;
 result = data(sub2ind(size(data),leading,trailing));
+result_mean = mean(result);
 figure('numbertitle','off','name','Diagonal Distance Plot');
 title(['Events: ' num2str(events) ' Start Point: ' num2str(start_point) ' Lag: ' num2str(lag)]);
 subplot(211);plot(result);
-subplot(212);plot(result-mean(result));
+line([1 length1-events],[result_mean result_mean],'linewidth',1,'color','r');
+xlim([1 length1-events]);
+ylabel('Distance Measurement');
+subplot(212);plot( (result-mean(result)).^2 );
 xlim([1 length1-events]);
 xlabel('Window Index');
-ylabel('Distance Measurement');
+ylabel('Distance Measurement Error From Mean');
 
 end

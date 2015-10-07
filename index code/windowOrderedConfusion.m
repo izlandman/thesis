@@ -17,6 +17,9 @@ anno_name = ['./_thesis/_Data/physio/eegmmidb/Annotations/' file_name(1:7) '_ANN
 [events, anno_listing, anno_index] = ...
     annotationEventTags(anno_name,num_samples,sample_rate,window_overlap);
 event_tags = unique(events);
+figure('numbertitle','off','name','Annotation Index');
+plot(anno_listing);
+xlim([1 num_samples]);
 % generate confusion plot based upon events
 num_tags = length(event_tags);
 tag_index = cell(num_tags,1);
@@ -99,5 +102,5 @@ colormap(R.myColorMapBluePink);
 title(['Subject: ' file_name ' Window Ordered Confusion Matrix'],'fontweight','bold','fontsize',16);
 ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
 view(0,90);
-
+diagonalDistancePlot(result_full(full_index,full_index),length(events),1,1);
 end
