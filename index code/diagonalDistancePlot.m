@@ -14,7 +14,7 @@ line([1 length1-events],[result_mean result_mean],'linewidth',1,'color','r');
 xlim([1 length1-events]);
 ylabel('Distance Measurement');
 xlabel(['Mean Distance: ' num2str(result_mean)]);
-subplot(212);plot( (result-mean(result)).^2 );
+subplot(212);plot( sqrt((result-mean(result)).^2) );
 xlim([1 length1-events]);
 xlabel('Window Index');
 ylabel('Distance Measurement Error From Mean');
