@@ -10,7 +10,7 @@ if( data(x_row,x_col) ~= data(x_col,x_row))
 end
 
 result_full = data;
-
+diagonalDistancePlot(result_full,30,1,1,'Full Data');
 % take the annotation file and determine where each leading sample falls
 % within the annotations. add this value to the trackin_matrix
 anno_name = ['./_thesis/_Data/physio/eegmmidb/Annotations/' file_name(1:7) '_ANN.ann'];
@@ -90,7 +90,7 @@ for q=1:num_tags
     colormap(R.myColorMapBluePink);
     axis([ 1 axis_len 1 axis_len]);
     ev_ind = ev_end + 1;
-    diagonalDistancePlot(result_full(ev_index,ev_index),event_count,1,1);
+    diagonalDistancePlot(result_full(ev_index,ev_index),event_count,1,1, num2str(event_tags(q)));
 end
 
 figure('numbertitle','off','name','Window Ordered Tasks, Skimmed');
@@ -102,5 +102,5 @@ colormap(R.myColorMapBluePink);
 title(['Subject: ' file_name ' Window Ordered Confusion Matrix'],'fontweight','bold','fontsize',16);
 ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
 view(0,90);
-diagonalDistancePlot(result_full(full_index,full_index),length(events),1,1);
+diagonalDistancePlot(result_full(full_index,full_index),length(events),1,1,'Ordered Full Data');
 end
