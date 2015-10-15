@@ -17,4 +17,7 @@ function warpSort(data)
     grouped_windows = binary_data.*sorted_index;
     plot_this = grouped_windows(grouped_windows(:,42)~=0,42);
     subplot(212);plot( plot_this, ones(1,length(plot_this)) );
+    
+    % compare annotations to voted sequences!
+    % besure to filter as well! 8 samples is 2 seconds or half an event!
 end
