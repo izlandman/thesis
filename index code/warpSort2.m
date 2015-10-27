@@ -119,8 +119,8 @@ while( counter > 0 )
     end
     
     sensitivity = sum(hits)./true_events
-    result(end+1,1) = target_window;
-    result(end+1,2:4) = sensitivity;
+%     result(end+1,1) = target_window;
+%     result(end+1,2:4) = sensitivity;
     
     
 end
