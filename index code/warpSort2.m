@@ -58,7 +58,7 @@ while( counter > 0 )
     % find intersection and remove those choices from ordered_peaks
     [~,~,ib] = intersect(links,ordered_peaks(:,2));
     ordered_peaks(ib,:) = [];
-    if( length( ordered_peaks(:,1) ) < 50 )
+    if( length( ordered_peaks(:,1) ) < leg1*.1 )
         counter = -1;
     end
     % compare annotations to voted sequences!
@@ -67,7 +67,7 @@ while( counter > 0 )
     target_set = target_set(target_set~=0);
     plot_set = zeros(1,leg1);
     plot_set(target_set) = 1;
-    window_size = 4;
+    window_size = round( 1 / (1 - window_overlap/100) );
     gain = 1;
     thresh = 0.7;
     filtered_set = firstDigiFilt(plot_set,window_size,gain);
