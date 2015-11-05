@@ -48,15 +48,15 @@ grouped_windows = binary_data.*sorted_index;
 counter = 1;
 [pks,locs,~,~] = findpeaks(binary_points);
 ordered_peaks = sortrows( [pks;locs]',-1);
-result = [];
+links = {};
 while( counter > 0 )
     
     % highest peak count window
     target_window = ordered_peaks(1,2);
     % filter out linked windows
-    links = sorted_index(binary_data(:,target_window),target_window);
+    links{end+1} = sorted_index(binary_data(:,target_window),target_window);
     % find intersection and remove those choices from ordered_peaks
-    [~,~,ib] = intersect(links,ordered_peaks(:,2));
+    [~,~,ib] = intersect(links{end},ordered_peaks(:,2));
     ordered_peaks(ib,:) = [];
     if( length( ordered_peaks(:,1) ) < leg1*.1 )
         counter = -1;
@@ -118,10 +118,7 @@ while( counter > 0 )
         index_start = 1 + index_end;
     end
     
-    sensitivity = sum(hits)./true_events
-%     result(end+1,1) = target_window;
-%     result(end+1,2:4) = sensitivity;
-    
+    sensitivity = sum(hits)./true_events    
     
 end
 end
