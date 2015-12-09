@@ -130,4 +130,50 @@ axisLabels = num2cell( new_index(g_coord(1:end-1)) );
 set(gca,'xTick',linspace(1,num_samples-anno_index(end),length(anno_index)),'XTickLabel',axisLabels);
 set(gca,'yTick',linspace(1,num_samples-anno_index(end),length(anno_index)),'YTickLabel',axisLabels);
 set(gca,'FontSize',14);
+
+% edit to make separate plot for artifacts or areas of interest
+figure('numbertitle','off','name','DTW Confusion Matrix Artifact');
+% normalize distance?
+% anorm = (confusion_data - min(min(confusion_data)))/(max(max(confusion_data))-min(min(confusion_data)));
+plot_this = (confusion_data);
+mesh(plot_this,'LineWidth',5);
+% get my color map
+R = load('myColorMap1');
+colormap(R.myColorMapBluePink);
+title(['Subject: ' file_name ' Confusion Matrix'],'fontweight','bold','fontsize',16);
+xlim([1 num_samples]);ylim([1 num_samples]);
+ylabel('Window Index','fontsize',14);xlabel('Window Index','fontsize',14);colorbar;
+view(0,90);
+
+peak_val = max(max(plot_this));
+
+% T0 threshold
+T0_thresh = event_lengths(1) + 1;
+line([1 num_samples],[T0_thresh T0_thresh],[peak_val peak_val],'linewidth',2,'color','k');
+line([T0_thresh T0_thresh],[1 num_samples],[peak_val peak_val],'linewidth',2,'color','k');
+% T1 threshold
+T1_thresh = T0_thresh + event_lengths(2);
+line([1 num_samples],[T1_thresh T1_thresh],[peak_val peak_val],'linewidth',2,'color','k');
+line([T1_thresh T1_thresh],[1 num_samples],[peak_val peak_val],'linewidth',2,'color','k');
+
+% event threshold lines
+g_coord = zeros(1,length(anno_index));
+g_coord(1) = 0;
+for i=1:length(anno_index)
+    g_coord(i+1) = g_coord(i) + anno_index(i);
+end
+x_coord = g_coord + 1;
+x_coord(1) = 1;
+g_coord = g_coord + 2;
+g_coord(1) = 1;
+for i=1:length(g_coord)
+    line([x_coord(i) x_coord(i)],[1 num_samples],[peak_val peak_val],'linewidth',1,'color','k');
+end
+
+axisLabels = num2cell( new_index(g_coord(1:end-1)) );
+set(gca,'xTick',linspace(1,num_samples-anno_index(end),length(anno_index)),'XTickLabel',axisLabels);
+set(gca,'yTick',linspace(1,num_samples-anno_index(end),length(anno_index)),'YTickLabel',axisLabels);
+set(gca,'FontSize',14);
+ylim([299 335]);
+
 end
