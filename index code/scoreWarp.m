@@ -92,7 +92,7 @@ figure('numbertitle','off','name','DTW Confusion Matrix');
 % normalize distance?
 % anorm = (confusion_data - min(min(confusion_data)))/(max(max(confusion_data))-min(min(confusion_data)));
 plot_this = (confusion_data);
-mesh(plot_this);
+mesh(plot_this,'LineWidth',3);
 % get my color map
 R = load('myColorMap1');
 colormap(R.myColorMapBluePink);
