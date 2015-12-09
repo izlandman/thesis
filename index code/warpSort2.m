@@ -69,7 +69,7 @@ while( counter > 0 )
     % find intersection and remove those choices from ordered_peaks
     [~,~,ib] = intersect(links{end},ordered_peaks(:,2));
     ordered_peaks(ib,:) = [];
-    if( length( ordered_peaks(:,1) ) < leg1*.05 )
+    if( length( ordered_peaks(:,1) ) < leg1*.08 )
         counter = -1;
     end
     % compare annotations to voted sequences!

@@ -49,7 +49,7 @@ for r=1:num_tags
     hist_plot = hist_data(tag_index{r},tag_index{r});
     subplot(3,1,r);hist(hist_plot(hist_plot>0),200);
     ylabel('Window Count','fontsize',14);xlim([plot_min plot_max]);
-    title_lab = ['Internal Distance, Event: ' num2str(r) ];
+    title_lab = ['Internal Distance, Event: T' num2str(r-1) ];
     xlabel(title_lab,'fontsize',14);
     set(gca,'fontsize',14);
     if( r == 1 )
@@ -69,15 +69,15 @@ subplot(3,1,1);hist(hist_plot_1(hist_plot_1>0),200);
 title_t = [ 'External Distance Histogram, ' file_name ];
 title(title_t, 'fontsize',14);
 xlim([0 extern_max]);ylabel('Window Count','fontsize',14)
-xlabel('External Distance, Event: 0 to 1','fontsize',14);
+xlabel('External Distance, Event: T0 to T1','fontsize',14);
 set(gca,'fontsize',14);
 subplot(3,1,2);hist(hist_plot_2(hist_plot_2>0),200);
 xlim([0 extern_max]);ylabel('Window Count','fontsize',14)
-xlabel('External Distance, Event: 0 to 2','fontsize',14);
+xlabel('External Distance, Event: T0 to T2','fontsize',14);
 set(gca,'fontsize',14);
 subplot(3,1,3);hist(hist_plot_3(hist_plot_3>0),200);
 xlim([0 extern_max]);ylabel('Window Count','fontsize',14)
-xlabel('External Distance, Event: 1 to 2','fontsize',14);
+xlabel('External Distance, Event: T1 to T2','fontsize',14);
 set(gca,'fontsize',14);
 
 confusion_data = result_full(new_index,new_index);
