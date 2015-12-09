@@ -33,14 +33,11 @@ subplot(211);mesh(sorted_data);view(0,90);
 xlabel('Window Index');ylabel('Number of windows');
 axis([1 leg1 1 leg2]);
 colormap(R.myColorMapBluePink); colorbar;
-title('Raw Distance Measurements');
-% now with the log of the distances taken it becomes 'more' obvious which
-% root windows match with the most other windows
+%
 subplot(212);mesh(log10(sorted_data));view(0,90);
-xlabel('Window Index');ylabel('Number of windows');
+xlabel('Window Index');ylabel('Number of windows, log_{10}');
 axis([1 leg1 1 leg2]);
 colormap(R.myColorMapBluePink); colorbar;
-title('Log Scaled Distance Measurements');
 
 thresh = 0.8;
 binary_data = log10(sorted_data)<thresh;
@@ -69,7 +66,7 @@ while( counter > 0 )
     % find intersection and remove those choices from ordered_peaks
     [~,~,ib] = intersect(links{end},ordered_peaks(:,2));
     ordered_peaks(ib,:) = [];
-    if( length( ordered_peaks(:,1) ) < leg1*.05 )
+    if( length( ordered_peaks(:,1) ) < leg1*.1 )
         counter = -1;
     end
     % compare annotations to voted sequences!
