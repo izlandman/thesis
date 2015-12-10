@@ -1,4 +1,4 @@
-function rebuildRaw(file_name,window,range)
+function rebuilt_raw = rebuildRaw(file_name,window,range)
 
 % this should generate final_output a {2x1} cell
 % final_output{1} -> [type, window_size, overlap%]
