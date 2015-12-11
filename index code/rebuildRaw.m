@@ -1,4 +1,4 @@
-function rebuilt_raw = rebuildRaw(file_name,window,range)
+function rebuilt_raw = rebuildRaw(file_name,window,range,varargin)
 
 % this should generate final_output a {2x1} cell
 % final_output{1} -> [type, window_size, overlap%]
@@ -28,18 +28,21 @@ else
     window_index = [window-2 window+2];
 end
 
-% plot raw data
 
-title_label = ['Window: ' num2str(window) ' Range: ' num2str(range)];
-figure('numbertitle','off','name',['Raw Data: ' num2str(window)])
-plot(rebuilt_raw,'LineWidth',2);
-title(title_label,'fontsize',20);
-grid on;
-xlabel('Window Index')
-ylabel('Amplitude (\muV)')
-xlim([0 length(rebuilt_raw)]);
-ax = gca;
-ax.FontSize = 20;
-ax.XTick = xticks;
-ax.XTickLabel = num2cell(window_index);
+if( nargin > 3)
+    % plot raw data
+    
+    title_label = ['Window: ' num2str(window) ' Range: ' num2str(range)];
+    figure('numbertitle','off','name',['Raw Data: ' num2str(window)])
+    plot([1:length(rebuilt_raw)],rebuilt_raw,'LineWidth',2);
+    title(title_label,'fontsize',20);
+    grid on;
+    xlabel('Window Index')
+    ylabel('Amplitude (\muV)')
+    xlim([0 length(rebuilt_raw)]);
+    ax = gca;
+    ax.FontSize = 20;
+    % ax.XTick = xticks;
+    % ax.XTickLabel = num2cell(window_index);
+end
 end
